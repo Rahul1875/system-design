@@ -70,5 +70,11 @@ Per-client bucket stored in a ConcurrentHashMap
 Notes: A burst of traffic fills up the queue with old requests, and if they are not processed in time, recent requests will be rate limited.
 
 
+5️⃣ Java Implementation (Production-Grade): 👉 We’ll implement Token Bucket fully and show Leaky Bucket as extension.
+Classes: 
+1. RateLimiter Interface: contains allowRequest()
+2. TokenBucketLimiter (Thread-Safe): actual implementation
+3. Per-User Rate Limiter Manager (Real-World): 
+4. Main Class
 
     
