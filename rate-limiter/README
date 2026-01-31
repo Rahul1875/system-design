@@ -86,7 +86,7 @@ What ReentrantLock guarantees
 | Reentrancy        | Same thread can re-lock safely |
 | Explicit control  | lock / unlock precisely        |
 
-Why not just synchronized => bcz doesn't provide Fairness
+Why not just synchronized => ReentrantLock gives us better control than synchronized, supports fairness and try-lock, and ensures correctness under high concurrency
 Why not AtomicInteger / volatile? 
 ❌ volatile: Only ensures visibility. Does NOT prevent race conditions
 ❌ AtomicInteger: Token refill logic is not a single atomic operation. Depends on time + math + condition checks
