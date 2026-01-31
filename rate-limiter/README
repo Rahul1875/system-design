@@ -77,3 +77,17 @@ Classes:
 3. Per-User Rate Limiter Manager (Real-World): 
 4. Main Class
 
+Ques: Why ReentrantLock specifically in TokenBucketLimiter?
+What ReentrantLock guarantees
+| Guarantee         | Why it matters                 |
+| ----------------- | ------------------------------ |
+| Mutual exclusion  | Only one thread updates tokens |
+| Memory visibility | Latest token value visible     |
+| Reentrancy        | Same thread can re-lock safely |
+| Explicit control  | lock / unlock precisely        |
+
+Why not just synchronized => bcz doesn't provide Fairness
+Why not AtomicInteger / volatile? 
+❌ volatile: Only ensures visibility. Does NOT prevent race conditions
+❌ AtomicInteger: Token refill logic is not a single atomic operation. Depends on time + math + condition checks
+
