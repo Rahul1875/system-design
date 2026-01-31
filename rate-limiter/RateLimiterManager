@@ -1,0 +1,15 @@
+import java.util.concurrent.ConcurrentHashMap;
+
+public class RateLimiterManager {
+
+    private final ConcurrentHashMap<String, RateLimiter> userLimiters =
+            new ConcurrentHashMap<>();
+
+    public boolean allowRequest(String userId) {
+        RateLimiter limiter = userLimiters.computeIfAbsent(
+                userId,
+                id -> new TokenBucketLimiter(10, 5) // capacity=10, refill=5/sec
+        );
+        return limiter.allowRequest();
+    }
+}
