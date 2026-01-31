@@ -1,0 +1,35 @@
+public class LeakyBucketLimiter implements RateLimiter {
+
+    private final int capacity;
+    private final double leakRatePerNano;
+
+    private double waterLevel;
+    private long lastLeakTime;
+
+    public LeakyBucketLimiter(int capacity, double leakRatePerSecond) {
+        this.capacity = capacity;
+        this.leakRatePerNano = leakRatePerSecond / 1_000_000_000.0;
+        this.lastLeakTime = System.nanoTime();
+    }
+
+    @Override
+    public synchronized boolean allowRequest() {
+        leak();
+
+        if (waterLevel < capacity) {
+            waterLevel++;
+            return true;
+        }
+        return false;
+    }
+
+    private void leak() {
+        long now = System.nanoTime();
+        long elapsed = now - lastLeakTime;
+
+        double leaked = elapsed * leakRatePerNano;
+        waterLevel = Math.max(0, waterLevel - leaked);
+
+        lastLeakTime = now;
+    }
+}
