@@ -1,0 +1,45 @@
+import java.util.concurrent.locks.ReentrantLock;
+
+public class TokenBucketLimiter implements RateLimiter {
+
+    private final int capacity;
+    private final double refillRatePerNano; // tokens per nanosecond
+
+    private double tokens;
+    private long lastRefillTime;
+
+    private final ReentrantLock lock = new ReentrantLock();
+
+    public TokenBucketLimiter(int capacity, double refillRatePerSecond) {
+        this.capacity = capacity;
+        this.refillRatePerNano = refillRatePerSecond / 1_000_000_000.0;
+        this.tokens = capacity;
+        this.lastRefillTime = System.nanoTime();
+    }
+
+    @Override
+    public boolean allowRequest() {
+        lock.lock();
+        try {
+            refill();
+
+            if (tokens >= 1) {
+                tokens -= 1;
+                return true;
+            }
+            return false;
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private void refill() {
+        long now = System.nanoTime();
+        long elapsedTime = now - lastRefillTime;
+
+        double refillTokens = elapsedTime * refillRatePerNano;
+        tokens = Math.min(capacity, tokens + refillTokens);
+
+        lastRefillTime = now;
+    }
+}
