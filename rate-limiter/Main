@@ -1,0 +1,13 @@
+public class Main {
+    public static void main(String[] args) throws InterruptedException {
+        RateLimiterManager manager = new RateLimiterManager();
+
+        String user = "user-123";
+
+        for (int i = 1; i <= 15; i++) {
+            System.out.println("Request " + i + ": " +
+                    manager.allowRequest(user));
+            Thread.sleep(100);
+        }
+    }
+}
