@@ -60,7 +60,7 @@ Per-client bucket stored in a ConcurrentHashMap
     Bucket size: the maximum number of tokens allowed in the bucket
     Refill rate: number of tokens put into the bucket every second
 
-2. Leaking bucket algorithm: The leaking bucket algorithm is similar to the token bucket except that requests are processed at a fixed rate. It is usually implemented with a first-in-first-out (FIFO) queue. The algorithm works as follows:
+2. [**Leaking bucket algorithm**]: The leaking bucket algorithm is similar to the token bucket except that requests are processed at a fixed rate. It is usually implemented with a first-in-first-out (FIFO) queue. The algorithm works as follows:
 -> When a request arrives, the system checks if the queue is full. If it is not full, the request is added to the queue.
 -> Otherwise, the request is dropped.
 -> Requests are pulled from the queue and processed at regular intervals.   
